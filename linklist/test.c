@@ -23,11 +23,14 @@ int main(void)
 	LinkListShow(phead);
 #endif
 
-#if 0
+#if 1
 	LinkListHeadInsert(phead, 40);
 	LinkListHeadInsert(phead, 30);
 	LinkListHeadInsert(phead, 20);
-	LinkListIndexInsert(phead, 0, 15);
+	LinkListShow(phead);
+	LinkListIndexInsert(phead, 0, 5);
+	LinkListShow(phead);
+	LinkListIndexInsert(phead, 2, 25);
 	LinkListShow(phead);
 	LinkListHeadDelete(phead);
 	LinkListShow(phead);
@@ -99,7 +102,8 @@ int data = 0;
 	LinkListIndexSearch(phead, 6, &data);
 	printf("search index:6, data:%d \n", data);
 #endif
-#if 1
+
+#if 0
 	int index = 0;
 	LinkListTailInsert(phead, 10);
 	LinkListTailInsert(phead, 20);
