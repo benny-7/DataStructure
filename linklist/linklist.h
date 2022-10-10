@@ -32,12 +32,10 @@ int LinkListDataDelete(Linklist_t *pl, int data);
 //change
 // index change
 int LinkListIndexChange(Linklist_t *pl, int index, int data);
-// data change
-int LinkListDataChange(Linklist_t *pl, int data);
 
 //search
-int LinkListIndexSearch(Linklist_t *pl, int index);
-int LinkListDataSearch(Linklist_t *pl, int data);
+int LinkListIndexSearch(Linklist_t *pl, int index, int* pdata);
+int LinkListDataSearch(Linklist_t *pl, int *ppos, int data);
 
 
 //   no head
