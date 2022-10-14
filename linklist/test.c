@@ -5,7 +5,7 @@ int main(void)
 {
 	Linklist_t *phead = NULL;
 	printf("test start: \n");
-	LinkListCreate(&phead);
+	LinkListInit(&phead);
 #if 0
 	LinkListHeadInsert(phead, 40);
 	LinkListHeadInsert(phead, 30);
@@ -65,8 +65,10 @@ int main(void)
 	LinkListTailInsert(phead, 20);
 	LinkListTailInsert(phead, 30);
 	LinkListTailInsert(phead, 40);
+	LinkListTailInsert(phead, 20);
+	LinkListTailInsert(phead, 20);
 	LinkListShow(phead);
-	LinkListDataDelete(phead, 10);
+	LinkListDataDelete(phead, 20);
 	LinkListShow(phead);
 	LinkListDataDelete(phead, 40);
 	LinkListShow(phead);
@@ -117,7 +119,7 @@ int data = 0;
 	LinkListDataSearch(phead, &index, 60);
 	printf("search index:%d, data:60 \n", index);
 #endif
-	LinkListFree(&phead);
+	LinkListDestory(&phead);
 	printf("test end \n");
 	return 0;
 }

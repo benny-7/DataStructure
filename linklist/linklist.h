@@ -6,8 +6,8 @@ typedef struct LinkList {
 	struct LinkList *next;
 }Linklist_t;
 
-void LinkListCreate(Linklist_t **pl);
-void LinkListFree(Linklist_t **pl);
+void LinkListInit(Linklist_t **pl);
+void LinkListDestory(Linklist_t **pl);
 
 void LinkListShow(Linklist_t *pl);
 //   have head

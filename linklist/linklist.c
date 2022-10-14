@@ -3,7 +3,7 @@
 #include <time.h>
 #include "linklist.h"
 
-void LinkListCreate(Linklist_t **pl)
+void LinkListInit(Linklist_t **pl)
 {
 	if (!(*pl = (Linklist_t *)malloc(sizeof(Linklist_t)))) {
 		printf("no memory !!! \n");
@@ -16,11 +16,20 @@ void LinkListCreate(Linklist_t **pl)
 	return;
 }
 
-void LinkListFree(Linklist_t **pl)
+void LinkListDestory(Linklist_t **pl)
 {
+	Linklist_t *pcur = NULL;
 	if (!(*pl)) {
 		printf("pl is NULL\n");
 		return;
+	}
+
+	while ((*pl)->next) {
+		pcur = (*pl)->next;
+		(*pl)->next = (*pl)->next->next;
+		pcur->next = NULL;
+		free(pcur);
+		pcur = NULL;
 	}
 
 	free(*pl);
@@ -108,9 +117,18 @@ int LinkListIndexInsert(Linklist_t *pl, int index, int data)
 
 	pper = pl;
 	pcur = pl->next;
-	while (pcur->next) {
-		if (count == index)
+	while (pcur) {
+		if (count == index) {
+			pnode = (Linklist_t *)malloc(sizeof(Linklist_t));
+			if (!pnode) {
+				printf("no memory !!! \n");
+				return -2;
+			}
+			pnode->data = data;
+			pnode->next = pper->next;
+			pper->next = pnode;
 			break;
+		}
 		pcur= pcur->next;
 		pper = pper->next;
 		count++;
@@ -121,15 +139,6 @@ int LinkListIndexInsert(Linklist_t *pl, int index, int data)
 		return -1;
 	}
 
-	pnode = (Linklist_t *)malloc(sizeof(Linklist_t));
-	if (!pnode) {
-		printf("no memory !!! \n");
-		return -2;
-	}
-	pnode->data = data;
-	pnode->next = pper->next;
-	pper->next = pnode;
-	
 	return 0;
 }
 
@@ -147,6 +156,7 @@ int LinkListHeadDelete(Linklist_t *pl)
 	if (pl->next) {
 		pcur = pl->next;
 		pl->next = pl->next->next;
+		pcur->next = NULL;
 
 		free(pcur);
 		pcur = NULL;
@@ -169,7 +179,7 @@ int LinkListTailDelete(Linklist_t *pl)
 
 	pcur = pre->next;
 	while (pcur->next) {
-		pre = pre->next;
+		pre = pcur;
 		pcur = pcur->next;
 	}
 
@@ -193,28 +203,23 @@ int LinkListIndexDelete(Linklist_t *pl, int index)
 	}
 
 	pcur = pre->next;
-	while (pcur->next) {
-		if (count == index)
+	while (pcur) {
+		if (count == index) {
+			pre->next = pcur->next;
+			pcur->next = NULL;
+			free(pcur);
+			pcur = pre->next;
 			break;
-		pre = pre->next;
+		}
+		pre = pcur;
 		pcur = pcur->next;
-		count ++;
+		count++;
 	}
-
-	if (count < index) {
-		printf("index invalid, Max index is %d\n", count);
-		return -3;
-	}
-
-	pre->next = pcur->next;
-	pcur->next = NULL;
-	free(pcur);
-	pcur = NULL;
 
 	return 0;
 }
 
-// data delete
+// ***** delete
 int LinkListDataDelete(Linklist_t *pl, int data)
 {
 	Linklist_t *pre = pl;
@@ -226,23 +231,18 @@ int LinkListDataDelete(Linklist_t *pl, int data)
 	}
 
 	pcur = pre->next;
-	while(pcur->next) {
-		if (data == pcur->data) 
-			break;
-		pre = pre->next;
+	while(pcur) {
+ 		if (data == pcur->data) {
+			pre->next = pcur->next;
+			pcur->next = NULL;
+			free(pcur);
+			pcur = pre->next;
+			continue;
+		}
+		pre = pcur;
 		pcur = pcur->next;
 	}
-
-	if (data != pcur->data) {
-		printf("%d not in the linklist\n", data);
-		return -2;
-	}
-
-	pre->next = pcur->next;
-	pcur->next = NULL;
-	free(pcur);
-	pcur = NULL;
-	
+ 
 	return 0;
 }
 
@@ -260,19 +260,14 @@ int LinkListIndexChange(Linklist_t *pl, int index, int data)
 	}
 
 	pcur = pl->next;
-	while (pcur->next) {
-		if (count == index)
+	while (pcur) {
+		if (index == count) {
+			pcur->data = data;
 			break;
+		}
 		pcur = pcur->next;
 		count ++;
 	}
-
-	if (count < index) {
-		printf("index invalid, Max index is %d\n", count);
-		return -3;
-	}
-
-	pcur->data = data;
 
 	return 0;
 }
@@ -288,20 +283,16 @@ int LinkListIndexSearch(Linklist_t *pl, int index, int* pdata)
 		return -1;
 	}
 
+	*pdata = -1;
 	pcur = pl->next;
-	while (pcur->next) {
-		if (count == index)
+	while (pcur) {
+		if (index == count) {
+			*pdata = pcur->data;
 			break;
+		}
 		pcur = pcur->next;
-		count ++;
+		count++;
 	}
-
-	if (count < index) {
-		printf("index invalid, Max index is %d\n", count);
-		*pdata = -1;
-		return -3;
-	}
-	*pdata = pcur->data;
 
 	return 0;
 }
@@ -316,20 +307,16 @@ int LinkListDataSearch(Linklist_t *pl, int *ppos, int data)
 		return -1;
 	}
 
+	*ppos = -1;//default
 	pcur = pl->next;
-	while (pcur->next) {
-		if (data == pcur->data) 
+	while (pcur) {
+		if (data == pcur->data) {
+			*ppos = count;
 			break;
+		}
 		pcur = pcur->next;
 		count ++;
 	}
-
-	if (data != pcur->data) {
-		printf("%d not in the linklist\n", data);
-		*ppos = -1;
-		return -3;
-	}
-	*ppos = count;
 
 	return 0;
 }
