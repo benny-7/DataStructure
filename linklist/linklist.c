@@ -37,7 +37,7 @@ void LinkListDestory(Linklist_t **pl)
 	}
 
 /*
-	
+销毁链表需要需要连头节点一起删掉
 */
 	while (*pl) {
 		pcur = *pl;
@@ -59,7 +59,9 @@ void LinkListClean(Linklist_t *pl)
 		printf("head is NULL\n");
 		return ;
 	}
-
+/*
+清除链表，除了头节点其他节点都free
+*/
 	while (pNode) {
 		pNode = pl->next;
 		pl->next = pNode->next;
@@ -383,6 +385,7 @@ int LinkListGetLength(Linklist_t *pl)
 /******************* general end ************************/
 
 /******************* app start ************************/
+/*判断是否有环，如果有环返回环入口，否则返回NULL*/
 int LinkListIsRing(Linklist_t *pl, Linklist_t *pEntrance)
 {
 	Linklist_t *pFast = pl;
@@ -392,7 +395,7 @@ int LinkListIsRing(Linklist_t *pl, Linklist_t *pEntrance)
 		printf("pl is NULL \n");
 		return -1;
 	}
-
+	/*如果有环，快指针一定会追上慢指针*/
 	while (pFast->next && pFast->next->next) {
 		if (pFast == pSlow) {
 			break;
@@ -400,12 +403,15 @@ int LinkListIsRing(Linklist_t *pl, Linklist_t *pEntrance)
 		pFast = pFast->next->next;
 		pSlow = pSlow->next;
 	}
-
+	/*推出上一个while的条件是fast指向NULL,说明无环*/
 	if (pFast->next || pFast->next->next) {
 		pEntrance = NULL;
 		return 0;
 	}
-
+	/*
+	参考链接：https://www.nowcoder.com//questionTerminal/253d2c59ec3e4bc68da16833f79a38e4
+	通过推导结论是：起点到入口的距离等于环内相遇的点到环入口的距离
+	*/
 	pFast = pl->next;
 	while (pFast != pSlow) {
 		pFast = pFast->next;
@@ -445,7 +451,7 @@ int LinkListReverse(Linklist_t **pl)
 		printf("pl is NULL \n");
 		return -1;
 	}
-
+	/*从旧链表上取节点头插到新链表上*/
 	Linklist_t *pCur = (*pl)->next;
 	Linklist_t *pNode;
 
