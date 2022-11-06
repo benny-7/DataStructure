@@ -4,8 +4,10 @@
 int main(void)
 {
 	Linklist_t *phead = NULL;
-	printf("test start: \n");
+	printf("test start: \n\n");
 	LinkListInit(&phead);
+	LinkListShow(phead);
+
 #if 0
 	LinkListHeadInsert(phead, 40);
 	LinkListHeadInsert(phead, 30);
@@ -28,9 +30,9 @@ int main(void)
 	LinkListHeadInsert(phead, 30);
 	LinkListHeadInsert(phead, 20);
 	LinkListShow(phead);
-	LinkListIndexInsert(phead, 0, 5);
+	LinkListPosInsert(phead, 0, 5);
 	LinkListShow(phead);
-	LinkListIndexInsert(phead, 2, 25);
+	LinkListPosInsert(phead, 2, 25);
 	LinkListShow(phead);
 	LinkListHeadDelete(phead);
 	LinkListShow(phead);
@@ -54,9 +56,9 @@ int main(void)
 	LinkListTailInsert(phead, 30);
 	LinkListTailInsert(phead, 40);
 	LinkListShow(phead);
-	LinkListIndexDelete(phead, 3);
+	LinkListPosDelete(phead, 3);
 	LinkListShow(phead);
-	LinkListIndexDelete(phead, 0);
+	LinkListPosDelete(phead, 0);
 	LinkListShow(phead);
 #endif
 
@@ -82,11 +84,11 @@ int main(void)
 	LinkListTailInsert(phead, 30);
 	LinkListTailInsert(phead, 40);
 	LinkListShow(phead);
-	LinkListIndexChange(phead, 0, 5);
+	LinkListPosChange(phead, 0, 5);
 	LinkListShow(phead);
-	LinkListIndexChange(phead, 3, 35);
+	LinkListPosChange(phead, 3, 35);
 	LinkListShow(phead);
-	LinkListIndexChange(phead, 5, 55);
+	LinkListPosChange(phead, 5, 55);
 	LinkListShow(phead);
 #endif
 
@@ -119,6 +121,11 @@ int data = 0;
 	LinkListDataSearch(phead, &index, 60);
 	printf("search index:%d, data:60 \n", index);
 #endif
+
+	LinkListReverse(&phead);
+	LinkListShow(phead);
+
+
 	LinkListDestory(&phead);
 	printf("test end \n");
 	return 0;

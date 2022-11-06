@@ -1,4 +1,4 @@
-CFLAGS +=  -Wall
+CFLAGS +=  -Wall -g
 test:test.o linklist.o
 	gcc $(CFLAGS) test.o linklist.o -o  test
 
